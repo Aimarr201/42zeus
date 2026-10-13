@@ -20,6 +20,16 @@ else
 	testdir=.
 fi
 
+if [ ! -d "$testdir" ]
+then
+	echo -e "${red}$testdir does not exist or is not a directory${nocolor}"
+	exit 1
+fi
+
+projectdir=$(cd "$testdir" 2>/dev/null && pwd)
+export ZEUS_PROJECT_DIR="$projectdir"
+export ZEUS_LAUNCH_DIR="$projectdir"
+
 echo -en "${blue}"
 echo "+---------------------------------------------------------------------------+";
 echo "| █████ █████   ████████     ███████████ ██████████ █████  █████  █████████ |";
@@ -65,7 +75,7 @@ then
 	echo -e "${yellow}New version ${latestversion} is available; to update, run \"zeus --update\"${nocolor}"
 fi
 
-if [ ! -d $testdir ]
+if [ ! -d "$testdir" ]
 then
 	echo -e "${red}$testdir does not exist or is not a directory${nocolor}"
 	exit 1
