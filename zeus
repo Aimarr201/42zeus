@@ -1,5 +1,8 @@
 #!/bin/bash
 
+launchdir="$PWD"
+export ZEUS_LAUNCH_DIR="$launchdir"
+
 if [ -t 1 ]
 then
 	red="\033[0;31m"
