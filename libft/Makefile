@@ -3,14 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: andeviei <andeviei@student.42.fr>          +#+  +:+       +#+         #
+#    By: amendibi <amendibi@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/11 17:23:02 by andeviei          #+#    #+#              #
-#    Updated: 2024/10/02 22:51:18 by andeviei         ###   ########.fr        #
+#    Updated: 2026/10/13 16:49:06 by amendibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS = -Wall -Werror -Wextra
+CC = gcc
 UNAME = $(shell uname)
 
 TESTLIB = ../tlib/tlib.a
@@ -34,23 +35,34 @@ src_bonus/test_lstdelone.c src_bonus/test_lstclear.c src_bonus/test_lstiter.c \
 src_bonus/test_lstmap.c
 HDRS_BONUS = src_bonus/test_bonus.h
 
+NAME_BONUS_TEST = test_bonus_real.out
+
+ifeq ($(UNAME), Darwin)
+LINKFLAGS = -undefined dynamic_lookup
+LIBS = $(LIBFT) $(TESTLIB)
+else
+LINKFLAGS =
+LIBS = -Wl,--whole-archive -L. -l:$(LIBFT) -l:$(TESTLIB) -Wl,--no-whole-archive
+endif
+
+define compile_test
+	$(CC) $(CFLAGS) $(LINKFLAGS) $(1) $(2) $(LIBS) -o $(3)
+endef
+
 all: $(NAME)
 
 $(NAME): tlib libft $(SRCS) $(HDRS)
-ifeq ($(UNAME), Darwin)
-	gcc $(CFLAGS) -undefined dynamic_lookup -Isrc $(SRCS) $(LIBFT) $(TESTLIB) -o $(NAME)
-else
-	gcc $(CFLAGS) $(SRCS) -Wl,--whole-archive -Isrc -L. -l:$(LIBFT) -l:$(TESTLIB) -Wl,--no-whole-archive -o $(NAME)
-endif
+	$(call compile_test,-Isrc,$(SRCS),$@)
 
 bonus: $(NAME_BONUS)
 
-$(NAME_BONUS): tlib libft $(SRCS_BONUS) $(HDRS_BONUS)
-ifeq ($(UNAME), Darwin)
-	gcc $(CFLAGS) -undefined dynamic_lookup $(SRCS_BONUS) $(LIBFT) $(TESTLIB) -o $(NAME_BONUS)
-else
-	gcc $(CFLAGS) $(SRCS_BONUS) -Wl,--whole-archive -L. -l:$(LIBFT) -l:$(TESTLIB) -Wl,--no-whole-archive -o $(NAME_BONUS)
-endif
+$(NAME_BONUS): tlib libft $(SRCS) $(HDRS)
+	$(call compile_test,-Isrc,$(SRCS),$@)
+
+bonus_tests: $(NAME_BONUS_TEST)
+
+$(NAME_BONUS_TEST): tlib libft $(SRCS_BONUS) $(HDRS_BONUS)
+	$(call compile_test,-Isrc_bonus,$(SRCS_BONUS),$@)
 
 tlib:
 	make -C ../tlib all clean
@@ -62,8 +74,8 @@ clean:
 	rm -f $(LIBFT)
 
 fclean: clean
-	rm -f $(NAME) $(NAME_BONUS) $(NAME_CHECK_TLIST)
+	rm -f $(NAME) $(NAME_BONUS) $(NAME_BONUS_TEST) $(NAME_CHECK_TLIST)
 
 re: fclean all
 
-.PHONY: all tlib libft clean fclean re
+.PHONY: all tlib libft clean fclean re bonus_tests
