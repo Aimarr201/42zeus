@@ -84,20 +84,3 @@ then
 fi
 
 make -s -C libft/ fclean
-
-
-make -s  -C libft/ bonus_tests clean
-if [ $? -ne 0 ]
-then
-	echo -e "${red}Errors while compiling tests${nocolor}"
-	make -s -C libft/ fclean
-	exit 1
-fi
-
-libft/test_bonus_real.out
-if [ $? -ne 0 ]
-then
-	status=1
-fi
-
-make -s -C libft/ fclean

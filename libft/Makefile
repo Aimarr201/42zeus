@@ -6,7 +6,7 @@
 #    By: amendibi <amendibi@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/11 17:23:02 by andeviei          #+#    #+#              #
-#    Updated: 2026/10/13 16:49:06 by amendibi         ###   ########.fr        #
+#    Updated: 2026/10/13 18:19:28 by amendibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,6 @@ src/str/test_strtrim.c src/test_split.c src/test_itoa.c src/str/test_strmapi.c s
 src/put/test_putchar.c src/put/test_putstr.c src/put/test_putendl.c src/put/test_putnbr.c
 HDRS = src/test.h
 
-NAME_BONUS = test_bonus.out
 SRCS_BONUS = src_bonus/test_bonus.c src_bonus/taux_lst.c \
 src_bonus/test_lstnew.c src_bonus/test_lstadd_front.c src_bonus/test_lstsize.c \
 src_bonus/test_lstlast.c src_bonus/test_lstadd_back.c \
@@ -35,7 +34,8 @@ src_bonus/test_lstdelone.c src_bonus/test_lstclear.c src_bonus/test_lstiter.c \
 src_bonus/test_lstmap.c
 HDRS_BONUS = src_bonus/test_bonus.h
 
-NAME_BONUS_TEST = test_bonus_real.out
+SRCS_ALL = $(SRCS) $(SRCS_BONUS)
+HDRS_ALL = $(HDRS) $(HDRS_BONUS)
 
 ifeq ($(UNAME), Darwin)
 LINKFLAGS = -undefined dynamic_lookup
@@ -51,18 +51,8 @@ endef
 
 all: $(NAME)
 
-$(NAME): tlib libft $(SRCS) $(HDRS)
-	$(call compile_test,-Isrc,$(SRCS),$@)
-
-bonus: $(NAME_BONUS)
-
-$(NAME_BONUS): tlib libft $(SRCS) $(HDRS)
-	$(call compile_test,-Isrc,$(SRCS),$@)
-
-bonus_tests: $(NAME_BONUS_TEST)
-
-$(NAME_BONUS_TEST): tlib libft $(SRCS_BONUS) $(HDRS_BONUS)
-	$(call compile_test,-Isrc_bonus,$(SRCS_BONUS),$@)
+$(NAME): tlib libft $(SRCS_ALL) $(HDRS_ALL)
+	$(call compile_test,-Isrc -Isrc_bonus,$(SRCS_ALL),$@)
 
 tlib:
 	make -C ../tlib all clean
@@ -74,8 +64,8 @@ clean:
 	rm -f $(LIBFT)
 
 fclean: clean
-	rm -f $(NAME) $(NAME_BONUS) $(NAME_BONUS_TEST) $(NAME_CHECK_TLIST)
+	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all tlib libft clean fclean re bonus_tests
+.PHONY: all tlib libft clean fclean re
