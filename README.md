@@ -18,7 +18,7 @@ En última instancia, 42zeus es solo una herramienta; si se usa para aportar val
 
 Ejecutando el siguiente comando se instalará 42zeus para el usuario actual:
 
-	curl https://raw.githubusercontent.com/ander-vieira/42zeus/master/setup | bash
+	curl https://raw.githubusercontent.com/Aimarr201/42zeus/master/setup | bash
 
 Este comando instalará 42zeus en el directorio ~/42zeus dentro del directorio personal del usuario. Si este directorio ya está en uso debido a una instalación previa, tendrás que eliminar esta carpeta manualmente antes de instalar. Si lo estás usando para otros fines, considera renombrar el directorio para permitir la instalación de 42zeus.
 
