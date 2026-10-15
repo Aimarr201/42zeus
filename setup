@@ -37,7 +37,7 @@ else
 
 # Clone the tester
     echo "Cloning git repository into directory ~/42zeus"
-    git clone https://github.com/Aimarr201/42zeus ~/42zeus
+    git clone https://github.com/ander-vieira/42zeus ~/42zeus
 if [ $? -ne 0 ]
 then
         echo -e "${red}Error while cloning repository.${nocolor}"
